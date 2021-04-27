@@ -2,34 +2,34 @@ from matplotlib import pyplot as plt
 from scipy.integrate import odeint
 import numpy as np
 
-g = 9.8 # m/s^2
+g = 9.81 # m/s^2
 
-def x1y1_odes(y, t, k1, m1, k2, m2, l01, l02 ):
-    x1, y1, z1, z2 = y
-    x1dot = z1
-    z1dot = (k1*x1/m1) * (1 - l01/np.sqrt(x1**2 + y1**2))
-    y1dot = z2
-    z2dot = (m1+m2)*g/m2 + (k1*y1/m2) * (1 - l01/np.sqrt(x1**2 + y1**2))
-    return x1dot, y1dot, z1dot, z2dot
+def m1_ode(y,t,m1,m2,k1,k2,l01,l02):
+    l1, z1, theta1, z2 = y
+    l1dot = z1
+    theta1dot = z2
+    z1dot = 1/2*theta1dot**2 + (m1 + m2)/m1 * g * np.cos(theta1) - k1/m1*(l1 - l01)
+    z2dot = -l1dot*z2/l1 - (m1 + m2)/m1 * g * np.sin(theta1)
+    return l1dot, z1dot, theta1dot, z2dot
 
-def x2y2_odes(y,t, k1, m1, k2, m2, l01, l02 ):
-    x2, y2, z3, z4 = y
-    x2dot = z3
-    z3dot = (k2*x2/m2) * (1 - l02/np.sqrt(x2**2 + y2**2))
-    y2dot = z4
-    z4dot = g + (k2*y2/m2) * (1 - l02/np.sqrt(x2**2 + y2**2))
-    return x2dot, y2dot, z3dot, z4dot
+def m2_ode(y,t,m1,m2,k1,k2,l01,l02):
+    l2, z3, theta2, z4 = y
+    l2dot = z3
+    theta2dot = z4
+    z3dot = 1/2*theta2dot**2 + g * np.cos(theta2) - k2/m2*(l2 - l02)
+    z4dot = -l2dot*z4/l2 - g * np.sin(theta2)
+    return l2dot, z3dot, theta2dot, z4dot
 
-def solve_odes(spring1_IC, spring2_IC, t, spring_constants):
-    k1, m1, k2, m2, l01, l02 = spring_constants 
-    x1y1_soln = odeint(x1y1_odes, spring1_IC, t, args=(k1, m1, k2, m2, l01, l02 ))
-    print(x1y1_soln)
-    x2y2_soln = odeint(x2y2_odes, spring2_IC, t, args=(k1, m1, k2, m2, l01, l02 ))
-    return (x1y1_soln, x2y2_soln)
-
-def plot_soln(x1, y1, x2, y2):
-    plt.plot(x1, y1)
-    plt.plot(x2, y2)
+def solve_ode(initial_conditions, t, constants):
+    m1,m2,k1,k2,l01,l02 = constants
+    spring1_IC, spring2_IC = initial_conditions
+    soln1 = odeint(m1_ode, spring1_IC, t, args=(m1,m2,k1,k2,l01,l02))
+    soln2 = odeint(m2_ode, spring2_IC, t, args=(m1,m2,k1,k2,l01,l02))
+    l1 = soln1[:,0]
+    theta1 = soln1[:,2]
+    l2 = soln2[:,0]
+    theta2 = soln2[:,2]
+    return (l1, theta1, l2, theta2)
 
 print("Pendulum module successfully imported!")
 
