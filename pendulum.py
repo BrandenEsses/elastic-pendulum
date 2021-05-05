@@ -17,7 +17,7 @@ def m1_ode(y,t,m1,m2,k1,l01):
     l1, z1, theta1, z2 = y
     l1dot = z1
     theta1dot = z2
-    z1dot = 1/2*theta1dot**2 + (m1 + m2)/m1 * g * np.cos(theta1) - k1/m1*(l1 - l01)
+    z1dot = l1*theta1dot**2 + (m1 + m2)/m1 * g * np.cos(theta1) - k1/m1*(l1 - l01)
     z2dot = -l1dot*z2/l1 - (m1 + m2)/m1 * g * np.sin(theta1)
     return l1dot, z1dot, theta1dot, z2dot
 
@@ -33,7 +33,7 @@ def m2_ode(y,t,m2,k2,l02):
     l2, z3, theta2, z4 = y
     l2dot = z3
     theta2dot = z4
-    z3dot = 1/2*theta2dot**2 + g * np.cos(theta2) - k2/m2*(l2 - l02)
+    z3dot = l2*theta2dot**2 + g * np.cos(theta2) - k2/m2*(l2 - l02)
     z4dot = -l2dot*z4/l2 - g * np.sin(theta2)
     return l2dot, z3dot, theta2dot, z4dot
 
