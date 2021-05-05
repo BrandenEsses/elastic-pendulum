@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 from scipy.integrate import odeint
 import numpy as np
+import matplotlib.animation as animation
 
 g = 9.81 # m/s^2
 
@@ -68,4 +69,4 @@ def convert_to_cartesian(l1, theta1, l2, theta2):
     y2 = y1 - l2 * np.cos(theta2)
     return (x1, y1, x2, y2)
 
-print("Pendulum module successfully imported!")
+print("Pendulum module imported!")

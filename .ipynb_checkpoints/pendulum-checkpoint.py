@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 from scipy.integrate import odeint
 import numpy as np
+import matplotlib.animation as animation
 
 g = 9.81 # m/s^2
 
@@ -23,7 +24,7 @@ def m1_ode(y,t,m1,m2,k1,l01):
 def m2_ode(y,t,m2,k2,l02):
     """
     Input:
-        - y: Initial conditions, tuple (l1, z1, theta1, z2)
+        - y: Initial conditions, tuple (l2, z3, theta2, z4)
         - t: Time values, array
         - m2,k2,l02: Physical constants, mass of mass 2, spring constant of spring 2, equilibrium length of spring 2
     Returns:
@@ -68,4 +69,4 @@ def convert_to_cartesian(l1, theta1, l2, theta2):
     y2 = y1 - l2 * np.cos(theta2)
     return (x1, y1, x2, y2)
 
-print("Pendulum module successfully imported!")
+print("Pendulum module imported!")
